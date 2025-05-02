@@ -12,16 +12,16 @@ Một trong những phát triển đáng ngạc nhiên nhất của vài thập 
 
 ## Mục lục
 1. [Hệ thống nhúng là gì?](#1-hệ-thống-nhúng-là-gì)
-   1. [Lịch sử và tương lai](#lịch-sử-và-tương-lai)
-   2. [Hệ thống thời gian thực](#hệ-thống-thời-gian-thực)
-2. [Những biến thể của chủ đề](#những-biến-thể-của-chủ-đề)
-   1. [Đồng hồ kỹ thuật số](#đồng-hồ-kỹ-thuật-số)
-   2. [Máy chơi trò chơi điện tử](#máy-chơi-trò-chơi-điện-tử)
-   3. [Thiết bị thám hiểm sao Hỏa](#thiết-bị-thám-hiểm-sao-hỏa)
-3. [Ngôn ngữ C: Mẫu số chung nhỏ nhất](#ngôn-ngữ-c-mẫu-số-chung-nhỏ-nhất)
-   1. [Các ngôn ngữ nhúng khác](#các-ngôn-ngữ-nhúng-khác)
-   2. [Lựa chọn ngôn ngữ cho cuốn sách](#lựa-chọn-ngôn-ngữ-cho-cuốn-sách)
-4. [Một vài lời về phần cứng](#một-vài-lời-về-phần-cứng)
+   1. [Lịch sử và tương lai](#11-lịch-sử-và-tương-lai)
+   2. [Hệ thống thời gian thực](#12-hệ-thống-thời-gian-thực)
+2. [Những biến thể của chủ đề](#2-những-biến-thể-của-chủ-đề)
+   1. [Đồng hồ kỹ thuật số](#21-đồng-hồ-kỹ-thuật-số)
+   2. [Máy chơi trò chơi điện tử](#22-máy-chơi-trò-chơi-điện-tử)
+   3. [Thiết bị thám hiểm sao Hỏa](#23-thiết-bị-thám-hiểm-sao-hỏa)
+3. [Ngôn ngữ C: Mẫu số chung nhỏ nhất](#3-ngôn-ngữ-c-mẫu-số-chung-nhỏ-nhất)
+   1. [Các ngôn ngữ nhúng khác](#31-các-ngôn-ngữ-nhúng-khác)
+   2. [Lựa chọn ngôn ngữ cho cuốn sách](#32-lựa-chọn-ngôn-ngữ-cho-cuốn-sách)
+4. [Một vài lời về phần cứng](#4-một-vài-lời-về-phần-cứng)
 
 ---
 
