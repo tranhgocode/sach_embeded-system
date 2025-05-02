@@ -64,7 +64,7 @@ Trên bo Arcom, thực tế có hai LED: một đỏ và một xanh lá. Trạng
 
 Bằng cách sửa đổi bit này, ta có thể thay đổi điện áp trên chân ngoài và từ đó thay đổi trạng thái của LED. Như minh họa trong Hình 2-1, khi bit 6 của thanh ghi P2LTCH là 1, LED tắt; khi nó là 0, LED sáng.
 
-<img src="sach/img/21chuong2.png" alt="bước 1" width="900" height="600">
+<img src="sach/img/21chuong2.png" alt="21" width="900" height="600">
 
 Thanh ghi P2LTCH nằm ở vùng nhớ đặc biệt gọi là I/O space, tại offset 0xFF5E. Thật không may, các thanh ghi trong I/O space của bộ xử lý 80x86 chỉ có thể được truy cập thông qua các lệnh assembly in và out. Ngôn ngữ C không hỗ trợ trực tiếp các hoạt động này. Thay thế gần nhất là các hàm thư viện inport và outport khai báo trong tập tin đầu vào dos.h chuyên cho PC. Lý tưởng nhất, chúng ta sẽ chỉ cần bao gồm tập tin đó và gọi trực tiếp các hàm trên trong chương trình nhúng. Tuy nhiên, vì chúng thuộc thư viện lập trình DOS, ta phải giả định trường hợp xấu nhất: chúng có thể không hoạt động trên hệ thống của chúng ta. Ít nhất, chúng ta không nên phụ thuộc vào chúng trong chương trình đầu tiên này.
 
