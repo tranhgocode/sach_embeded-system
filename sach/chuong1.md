@@ -11,7 +11,7 @@ Một trong những phát triển đáng ngạc nhiên nhất của vài thập 
 ---
 
 ## Mục lục
-1. [Hệ thống nhúng là gì?](#-1.-Hệ-thống-nhúng-là-gì)
+1. [Hệ thống nhúng là gì?](#1-hệ-thống-nhúng-là-gì)
    1. [Lịch sử và tương lai](#lịch-sử-và-tương-lai)
    2. [Hệ thống thời gian thực](#hệ-thống-thời-gian-thực)
 2. [Những biến thể của chủ đề](#những-biến-thể-của-chủ-đề)
