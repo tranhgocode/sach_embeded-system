@@ -1,146 +1,173 @@
-Bài toán đề ra là giải phương trình vi phân cấp hai sau:
-
-$$
-\varepsilon \bar{y}'' + \bar{y}' + \bar{y} = 1, \quad \bar{y}(0) = 0, \quad \bar{y}'(0) = 1,
-$$
-
-với $\varepsilon = 0.01$, từ $t=0$ đến $t=1$ bằng nhiều phương pháp số khác nhau (Explicit Euler, Implicit Euler, Implicit Trapezoid, Modified Euler, Gear các bậc).
-
----
-
-## 1. Chuyển đổi bài toán về hệ phương trình bậc nhất
-
-Đặt:
-
-$$
-y_1 = \bar{y}, \quad y_2 = \bar{y}',
-$$
-
-khi đó:
-
-$$
-y_1' = y_2,
-$$
-
-$$
-\varepsilon y_2' + y_2 + y_1 = 1 \implies y_2' = \frac{1 - y_2 - y_1}{\varepsilon}.
-$$
-
-Ta có hệ:
+Dưới đây mình sẽ hướng dẫn chi tiết cách giải bài toán từ câu 213 đến 218 theo từng phương pháp, với hệ ODE đã chuyển thành hệ 2 phương trình bậc nhất:
 
 $$
 \begin{cases}
 y_1' = y_2, \\
 y_2' = \frac{1 - y_2 - y_1}{\varepsilon},
 \end{cases}
+\quad y_1(0) = 0, \quad y_2(0) = 1, \quad \varepsilon = 0.01,
 $$
 
-với điều kiện ban đầu:
+trên đoạn $t \in [0,1]$.
+
+---
+
+# 213. Giải bằng phương pháp **Explicit Euler**
+
+* Bước thời gian: $\Delta t = 0.01, 0.02, 0.025$
+* Công thức cập nhật:
 
 $$
-y_1(0) = 0, \quad y_2(0) = 1.
+\begin{cases}
+y_{1,n+1} = y_{1,n} + \Delta t \cdot y_{2,n}, \\
+y_{2,n+1} = y_{2,n} + \Delta t \cdot \frac{1 - y_{2,n} - y_{1,n}}{\varepsilon}.
+\end{cases}
+$$
+
+* Khởi tạo: $y_{1,0} = 0, y_{2,0} = 1, t_0 = 0$.
+* Lặp đến $t_n = 1$.
+
+---
+
+# 214. Giải bằng phương pháp **Implicit Euler**
+
+* Bước thời gian: $\Delta t = 0.1, 0.2, 0.25$
+* Công thức cập nhật ẩn (implicit):
+
+$$
+\begin{cases}
+y_{1,n+1} = y_{1,n} + \Delta t \cdot y_{2,n+1}, \\
+y_{2,n+1} = y_{2,n} + \Delta t \cdot \frac{1 - y_{2,n+1} - y_{1,n+1}}{\varepsilon}.
+\end{cases}
+$$
+
+* $y_{n+1} = (y_{1,n+1}, y_{2,n+1})$ phải được giải từ hệ phương trình tuyến tính:
+
+$$
+\begin{cases}
+y_{1,n+1} - \Delta t y_{2,n+1} = y_{1,n}, \\
+y_{2,n+1} + \frac{\Delta t}{\varepsilon} y_{2,n+1} + \frac{\Delta t}{\varepsilon} y_{1,n+1} = y_{2,n} + \frac{\Delta t}{\varepsilon}.
+\end{cases}
+$$
+
+Ta có thể viết lại dưới dạng ma trận:
+
+$$
+\begin{bmatrix}
+1 & -\Delta t \\
+\frac{\Delta t}{\varepsilon} & 1 + \frac{\Delta t}{\varepsilon}
+\end{bmatrix}
+\begin{bmatrix}
+y_{1,n+1} \\
+y_{2,n+1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_{1,n} \\
+y_{2,n} + \frac{\Delta t}{\varepsilon}
+\end{bmatrix}.
+$$
+
+Giải hệ trên để tìm $y_{1,n+1}, y_{2,n+1}$.
+
+---
+
+# 215. Giải bằng phương pháp **Implicit trapezoid**
+
+* Bước thời gian: $\Delta t = 0.1, 0.2, 0.25$
+* Công thức:
+
+$$
+y_{n+1} = y_n + \frac{\Delta t}{2} [f(t_n, y_n) + f(t_{n+1}, y_{n+1})].
+$$
+
+Chi tiết cho từng thành phần:
+
+$$
+\begin{cases}
+y_{1,n+1} = y_{1,n} + \frac{\Delta t}{2} (y_{2,n} + y_{2,n+1}), \\
+y_{2,n+1} = y_{2,n} + \frac{\Delta t}{2} \left( \frac{1 - y_{2,n} - y_{1,n}}{\varepsilon} + \frac{1 - y_{2,n+1} - y_{1,n+1}}{\varepsilon} \right).
+\end{cases}
+$$
+
+Viết lại:
+
+$$
+\begin{cases}
+y_{1,n+1} - \frac{\Delta t}{2} y_{2,n+1} = y_{1,n} + \frac{\Delta t}{2} y_{2,n}, \\
+y_{2,n+1} + \frac{\Delta t}{2\varepsilon} y_{2,n+1} + \frac{\Delta t}{2\varepsilon} y_{1,n+1} = y_{2,n} + \frac{\Delta t}{2\varepsilon} (1 - y_{2,n} - y_{1,n}) + \frac{\Delta t}{2\varepsilon}.
+\end{cases}
+$$
+
+Cũng là hệ phương trình tuyến tính để giải cho $y_{1,n+1}, y_{2,n+1}$.
+
+---
+
+# 216. Giải bằng phương pháp **Modified Euler** (Heun’s method)
+
+* Bước thời gian: $\Delta t = 0.01, 0.02, 0.025$
+* Bước 1: Tính $k_1 = f(t_n, y_n)$
+* Bước 2: Tính $y^* = y_n + \Delta t \cdot k_1$ (dự báo bằng Explicit Euler)
+* Bước 3: Tính $k_2 = f(t_{n+1}, y^*)$
+* Bước 4: Cập nhật:
+
+$$
+y_{n+1} = y_n + \frac{\Delta t}{2} (k_1 + k_2).
+$$
+
+Áp dụng cho từng thành phần:
+
+$$
+k_1 = \begin{bmatrix} y_{2,n} \\ \frac{1 - y_{2,n} - y_{1,n}}{\varepsilon} \end{bmatrix}, \quad
+y^* = y_n + \Delta t k_1,
+$$
+
+$$
+k_2 = \begin{bmatrix} y_2^* \\ \frac{1 - y_2^* - y_1^*}{\varepsilon} \end{bmatrix}.
 $$
 
 ---
 
-## 2. Các phương pháp giải
+# 217. Giải bằng **Gear phương pháp bậc nhất**
 
-Bạn cần giải hệ trên từ $t=0$ đến $t=1$ với các phương pháp:
+* Bước thời gian: $\Delta t = 0.1, 0.2$
+* Gear bậc nhất tương tự phương pháp backward Euler, công thức:
 
-* Explicit Euler (Bài 213),
-* Implicit Euler (Bài 214),
-* Implicit Trapezoid (Bài 215),
-* Modified Euler (Bài 216),
-* Gear bậc 1 (Bài 217),
-* Gear bậc 2 (Bài 218),
-* Gear bậc 4 (Bài 219).
+$$
+y_{n+1} = y_n + \Delta t f(t_{n+1}, y_{n+1}),
+$$
 
-Mỗi phương pháp có các bước thời gian $\Delta t$ khác nhau như đề bài.
+giải hệ phương trình ẩn giống câu 214 (Implicit Euler).
 
 ---
 
-## 3. Ví dụ: giải bằng phương pháp Explicit Euler
+# 218. Giải bằng **Gear phương pháp bậc hai**
 
-Công thức Explicit Euler với bước $\Delta t$:
+* Bước thời gian: $\Delta t = 0.1$
+* Dùng giá trị bắt đầu từ phương pháp Gear bậc nhất.
+* Công thức Gear bậc hai:
 
 $$
-y_{n+1} = y_n + \Delta t \cdot f(t_n, y_n)
+\frac{1}{\Delta t^2} (y_{n+1} - 2 y_n + y_{n-1}) = f'(t_{n+1}, y_{n+1}),
 $$
 
-Ở đây $y_n = (y_{1,n}, y_{2,n})$, $f(t,y) = (y_2, \frac{1 - y_2 - y_1}{\varepsilon})$.
+với $f'$ là đạo hàm theo thời gian (hoặc dạng xấp xỉ).
 
-**Thuật toán:**
-
-* Khởi tạo: $y_1(0) = 0$, $y_2(0) = 1$.
-* Với mỗi bước $n$:
-
-  $$
-  y_{1,n+1} = y_{1,n} + \Delta t \cdot y_{2,n}
-  $$
-
-  $$
-  y_{2,n+1} = y_{2,n} + \Delta t \cdot \frac{1 - y_{2,n} - y_{1,n}}{\varepsilon}
-  $$
-* Lặp đến $t = 1$.
+Phương pháp này phức tạp hơn, thường được áp dụng cho bài toán có đạo hàm cấp cao. Trong thực tế, Gear bậc hai được dùng trong giải tích số cho hệ phương trình vi phân cứng.
 
 ---
 
-## 4. Cách triển khai các phương pháp khác
+# Tóm tắt:
 
-* **Implicit Euler:**
-
-$$
-y_{n+1} = y_n + \Delta t \cdot f(t_{n+1}, y_{n+1}),
-$$
-
-phải giải hệ phương trình để tìm $y_{n+1}$.
-
-* **Implicit Trapezoid:**
-
-$$
-y_{n+1} = y_n + \frac{\Delta t}{2}[f(t_n,y_n) + f(t_{n+1}, y_{n+1})],
-$$
-
-phải giải hệ phương trình phi tuyến với $y_{n+1}$.
-
-* **Modified Euler:** là phương pháp cải tiến từ explicit Euler, thường liên quan trung bình hóa dốc.
-
-* **Gear method:** là phương pháp đa bước, cần giá trị bắt đầu từ các phương pháp bậc thấp hơn.
+| Câu | Phương pháp                    | Bước thời gian $\Delta t$ | Cách giải chính                                                                  |
+| --- | ------------------------------ | ------------------------- | -------------------------------------------------------------------------------- |
+| 213 | Explicit Euler                 | 0.01, 0.02, 0.025         | Cập nhật $y_{n+1} = y_n + \Delta t f(t_n,y_n)$                                   |
+| 214 | Implicit Euler                 | 0.1, 0.2, 0.25            | Giải hệ $y_{n+1} = y_n + \Delta t f(t_{n+1}, y_{n+1})$                           |
+| 215 | Implicit trapezoid             | 0.1, 0.2, 0.25            | Giải hệ với $y_{n+1} = y_n + \frac{\Delta t}{2}[f(t_n,y_n)+f(t_{n+1}, y_{n+1})]$ |
+| 216 | Modified Euler (Heun)          | 0.01, 0.02, 0.025         | Dự báo explicit Euler, sau đó trung bình dốc $k_1,k_2$                           |
+| 217 | Gear bậc nhất (Backward Euler) | 0.1, 0.2                  | Giống implicit Euler                                                             |
+| 218 | Gear bậc hai                   | 0.1                       | Dùng giá trị bắt đầu từ Gear 1, công thức Gear 2 (đa bước)                       |
 
 ---
 
-## 5. Gợi ý triển khai
-
-Bạn có thể triển khai giải trong Python, Matlab hoặc phần mềm khác, ví dụ với Python:
-
-```python
-import numpy as np
-
-def f(y, eps):
-    y1, y2 = y
-    dy1 = y2
-    dy2 = (1 - y2 - y1)/eps
-    return np.array([dy1, dy2])
-
-def explicit_euler(y0, t0, t_end, dt, eps):
-    t = t0
-    y = y0
-    results = [(t, y.copy())]
-    while t < t_end:
-        y = y + dt * f(y, eps)
-        t += dt
-        results.append((t, y.copy()))
-    return results
-
-eps = 0.01
-y0 = np.array([0.0, 1.0])
-dt = 0.01
-res = explicit_euler(y0, 0.0, 1.0, dt, eps)
-for t, y in res:
-    print(f"t={t:.2f}, y={y[0]:.5f}, y'={y[1]:.5f}")
-```
-
----
-
-Nếu bạn muốn tôi hỗ trợ giải cụ thể bằng một phương pháp nào, hoặc triển khai code cụ thể, bạn vui lòng cho biết nhé!
-
+Nếu bạn muốn, mình có thể giúp bạn viết code cụ thể cho từng phương pháp, hoặc tính toán từng bước mẫu. Bạn muốn mình làm bước nào trước?
